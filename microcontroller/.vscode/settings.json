@@ -1,3 +1,9 @@
 {
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "nvs_flash.h": "c",
+        "ble_svc_gatt.h": "c",
+        "esp_nimble_hci.h": "c",
+        "ble_svc_gap.h": "c"
+    }
 }
