@@ -18,7 +18,7 @@ void app_main() {
         setup_run();
     }
 
-    int rc = httpserver_start();
+    httpserver_start();
 
     while(true) {
         sleep(5);

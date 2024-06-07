@@ -48,24 +48,80 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
 };
 
 bool setup_should_run() {
-    return true;
+    int rc;
+
+    nvs_handle_t handle;
+    rc = nvs_open("storage", NVS_READONLY, &handle);
+    if(rc != 0) return false;
+
+    size_t length = 100;
+    rc = nvs_get_str(handle, "ssid", setup_ssid, &length);
+
+    switch (rc) {
+        case ESP_OK:
+            break;
+
+        case ESP_ERR_NVS_NOT_FOUND:
+            return true;
+
+        default :
+            printf("Error (%s) reading ssid!\n", esp_err_to_name(rc));
+            return true;
+    }
+
+    rc = nvs_get_str(handle, "password", setup_password, &length);
+
+    switch (rc) {
+        case ESP_OK:
+        case ESP_ERR_NVS_NOT_FOUND:
+            break;
+            
+        default :
+            printf("Error (%s) reading password!\n", esp_err_to_name(rc));
+    }
+
+    rc = wifi_connect(setup_ssid, setup_password);
+
+    if(rc != 0) return true;
+
+    return false;
 }
 
 void setup_run() {
+    int rc;
+
     bluetooth_init("Zoey's Heart");
     bluetooth_add_gatt_services(gatt_svr_svcs);
     bluetooth_run();
 
-    while(!setup_password_set || !setup_ssid_set) {
-        printf("Awaiting wifi SSID & password...\n");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    bool valid = false;
+
+    while(!valid) {
+        while(!setup_password_set || !setup_ssid_set) {
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+        }
+
+        rc = wifi_connect(setup_ssid, setup_password);
+        
+        if(rc != 0) {
+            setup_password_set = false;
+            setup_ssid_set = false;
+            continue;
+        }
+
+        valid = true;
     }
 
-    bluetooth_stop();
+    nvs_handle_t handle;
+    rc = nvs_open("storage", NVS_READWRITE, &handle);
+    if(rc != 0) return;
 
-    wifi_connect(setup_ssid, setup_password);
-    
-    printf("%s - %s\n", setup_ssid, setup_password);
+    nvs_set_str(handle, "ssid", (const char*) &setup_ssid);
+    nvs_set_str(handle, "password", (const char*) &setup_password);
+
+    rc = nvs_commit(handle);
+
+    bluetooth_stop();
 }
 
 static int setup_characteristic_accessed(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg) {
