@@ -4,6 +4,9 @@
         "nvs_flash.h": "c",
         "ble_svc_gatt.h": "c",
         "esp_nimble_hci.h": "c",
-        "ble_svc_gap.h": "c"
+        "ble_svc_gap.h": "c",
+        "nimble_port.h": "c",
+        "bluetooth.h": "c",
+        "util.h": "c"
     }
 }

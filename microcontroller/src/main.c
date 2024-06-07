@@ -13,6 +13,4 @@ void app_main() {
     if(setup_should_run()) {
         setup_run();
     }
-
-    printf("Hello world!\n");
 }

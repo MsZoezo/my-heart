@@ -1,1 +1,1 @@
-idf_component_register(SRCS "main.c" "setup.c")
+idf_component_register(SRCS "main.c" "setup.c" "bluetooth.c" REQUIRES bt)
