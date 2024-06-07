@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <nvs_flash.h>
-#include "setup.h"
+#include <setup.h>
+#include <wifi.h>
 
 void app_main() {
     // Initialize NVS.
@@ -9,6 +10,8 @@ void app_main() {
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
+
+    wifi_init();
 
     if(setup_should_run()) {
         setup_run();

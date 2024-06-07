@@ -1,11 +1,11 @@
 #include <setup.h>
 #include <bluetooth.h>
+#include <wifi.h>
 
 char setup_ssid[100];
 bool setup_ssid_set = false;
 char setup_password[100];
 bool setup_password_set = false;
-
 
 // UUID for our gatt service: f5042e1c-2731-460a-87b8-34a918c062f3
 static const ble_uuid128_t setup_gatt_svc_uuid = BLE_UUID128_INIT(0xf3, 0x62, 0xc0, 0x18, 0xa9, 0x34, 0xb8, 0x87, 0x0a, 0x46, 0x31, 0x27, 0x1c, 0x2e, 0x04, 0xf5);
@@ -63,6 +63,7 @@ void setup_run() {
 
     bluetooth_stop();
 
+    wifi_connect(setup_ssid, setup_password);
     
     printf("%s - %s\n", setup_ssid, setup_password);
 }
