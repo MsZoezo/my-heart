@@ -1,1 +1,1 @@
-idf_component_register(SRCS "main.c" "setup.c" "bluetooth.c" "wifi.c" REQUIRES bt)
+idf_component_register(SRCS "main.c" "setup.c" "bluetooth.c" "wifi.c" "httpserver.c" REQUIRES bt esp_wifi)

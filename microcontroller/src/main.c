@@ -2,6 +2,7 @@
 #include <nvs_flash.h>
 #include <setup.h>
 #include <wifi.h>
+#include <httpserver.h>
 
 void app_main() {
     // Initialize NVS.
@@ -15,5 +16,11 @@ void app_main() {
 
     if(setup_should_run()) {
         setup_run();
+    }
+
+    int rc = httpserver_start();
+
+    while(true) {
+        sleep(5);
     }
 }

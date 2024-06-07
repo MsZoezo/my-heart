@@ -7,6 +7,8 @@
         "ble_svc_gap.h": "c",
         "nimble_port.h": "c",
         "bluetooth.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "http_parser.h": "c",
+        "esp_wifi.h": "c"
     }
 }
